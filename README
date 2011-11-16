@@ -1,0 +1,27 @@
+Create virtual disk of mediawiki
+
+== ubuntu-vm-builder setup ==
+
+on ubuntu 11.10 you need to install python-vm-builder
+
+  apt-get install python-vm-builder
+
+with that installed build image:
+
+ ./build.sh
+
+this will create a vdi image in mediawiki/
+
+== VirtualBox Usage ==
+Now you can create a new VirtualBox machine, use vdi image as existing hard disk.
+Before starting up you have to adjust some settings:
+ In System -> Processor enable PAE/NX
+ In Storage remove disk from SATA Controller
+            add disk to IDE Controler and enable "Use host I/O cache"
+    
+ In Network -> Adpater 1 set to Bridged Adapter with your connected controller
+
+user/password:
+    mediawiki/mediawiki
+
+access at http://mediawiki.local/

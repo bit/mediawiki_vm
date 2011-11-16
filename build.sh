@@ -1,0 +1,31 @@
+#!/bin/sh
+base=$(pwd)
+sudo  vmbuilder vbox ubuntu --suite=oneiric \
+    --verbose --debug \
+    --arch i386 \
+    --dest $base/mediawiki \
+    --hostname mediawiki \
+    --swapsize 512 \
+    --rootsize 8192 \
+    --user mediawiki \
+    --pass mediawiki \
+    --components main,universe,multiverse \
+    --addpkg openssh-server \
+    --addpkg acpid \
+    --addpkg vim \
+    --addpkg wget \
+    --addpkg pwgen \
+    --addpkg apache2-mpm-prefork \
+    --addpkg libapache2-mod-php5 \
+    --addpkg php5-cli \
+    --addpkg php5-pear \
+    --addpkg php5-curl \
+    --addpkg php5-mysql \
+    --addpkg mysql-server \
+    --addpkg imagemagick \
+    --addpkg subversion \
+    --addpkg avahi-daemon \
+    --addpkg ffmpeg \
+    --addpkg ffmpeg2theora \
+    --execscript=$base/install.sh \
+    --firstboot=$base/firstboot.sh
