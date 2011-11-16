@@ -18,7 +18,7 @@ sudo  vmbuilder vbox ubuntu --suite=oneiric \
     --addpkg apache2-mpm-prefork \
     --addpkg libapache2-mod-php5 \
     --addpkg php5-cli \
-    --addpkg php5-pear \
+    --addpkg php-pear \
     --addpkg php5-curl \
     --addpkg php5-mysql \
     --addpkg mysql-server \

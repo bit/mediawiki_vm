@@ -20,7 +20,7 @@ service apache2 restart
 
 mysqladmin create mediawiki
 
-chmod -R www-data.www-data /srv/mediawiki/images
+chown -R www-data.www-data /srv/mediawiki/images
 
 cd /srv/mediawiki/maintenance
 php install.php \
