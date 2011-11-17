@@ -62,3 +62,22 @@ EOF
 
 cd /srv/mediawiki/maintenance
 php update.php --quick
+
+cat > /etc/init/timedmediahandler <<EOF
+# TimedMediaHandler WebVideoJobRunner
+
+description	"TimedMediaHandler WebVideoJobRunner"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+kill timeout 5
+respawn
+respawn limit 10 5
+
+umask 022
+
+env IP=/srv/mediawiki
+exec /usr/bin/sudo -u www-data /usr/bin/php \$IP/extensions/TimedMediaHandler/maintenance/WebVideoJobRunner.php
+EOF
+service timedmediahandler start
+
