@@ -1,6 +1,6 @@
 #!/bin/sh
 base=$(pwd)
-sudo  vmbuilder vbox ubuntu --suite=oneiric \
+sudo  vmbuilder vbox ubuntu --suite=lucid \
     --verbose --debug \
     --arch i386 \
     --dest $base/mediawiki \
@@ -10,6 +10,7 @@ sudo  vmbuilder vbox ubuntu --suite=oneiric \
     --user mediawiki \
     --pass mediawiki \
     --components main,universe,multiverse \
+    --ppa j/timedmediahandler \
     --addpkg openssh-server \
     --addpkg acpid \
     --addpkg vim \
