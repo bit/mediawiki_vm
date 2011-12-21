@@ -15,10 +15,6 @@ this will create a vdi image in mediawiki/
 == VirtualBox Usage ==
 Now you can create a new VirtualBox machine, use vdi image as existing hard disk.
 Before starting up you have to adjust some settings:
- In System -> Processor enable PAE/NX
- In Storage remove disk from SATA Controller
-            add disk to IDE Controler and enable "Use host I/O cache"
-    
  In Network -> Adpater 1 set to Bridged Adapter with your connected controller
 
 user/password:
