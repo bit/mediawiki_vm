@@ -14,6 +14,7 @@ EOF
 cat > /etc/php5/apache2/conf.d/mediawiki.ini <<EOF 
 upload_max_filesize = 128M
 EOF
+echo "video/webm                webm" >> /etc/mime.types
 
 a2enmod rewrite
 service apache2 restart
