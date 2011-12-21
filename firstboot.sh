@@ -63,7 +63,7 @@ EOF
 cd /srv/mediawiki/maintenance
 php update.php --quick
 
-cat > /etc/init/timedmediahandler <<EOF
+cat > /etc/init/timedmediahandler.conf <<EOF
 # TimedMediaHandler WebVideoJobRunner
 
 description	"TimedMediaHandler WebVideoJobRunner"
