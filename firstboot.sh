@@ -13,6 +13,7 @@ cat > /etc/apache2/sites-available/default << EOF
 EOF
 cat > /etc/php5/apache2/conf.d/mediawiki.ini <<EOF 
 upload_max_filesize = 128M
+post_max_size = 128M
 EOF
 echo "video/webm                webm" >> /etc/mime.types
 
