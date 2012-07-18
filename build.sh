@@ -3,6 +3,7 @@ base=$(pwd)
 sudo  vmbuilder vbox ubuntu --suite=precise \
     --verbose --debug \
     --arch i386 \
+    --flavour generic \
     --dest $base/mediawiki \
     --hostname mediawiki \
     --swapsize 512 \
