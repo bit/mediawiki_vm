@@ -1,6 +1,6 @@
 #!/bin/sh
 base=$(pwd)
-sudo  vmbuilder vbox ubuntu --suite=lucid \
+sudo  vmbuilder vbox ubuntu --suite=precise \
     --verbose --debug \
     --arch i386 \
     --dest $base/mediawiki \
@@ -10,7 +10,6 @@ sudo  vmbuilder vbox ubuntu --suite=lucid \
     --user mediawiki \
     --pass mediawiki \
     --components main,universe,multiverse \
-    --ppa j/timedmediahandler \
     --addpkg openssh-server \
     --addpkg acpid \
     --addpkg vim \
@@ -24,7 +23,7 @@ sudo  vmbuilder vbox ubuntu --suite=lucid \
     --addpkg php5-mysql \
     --addpkg mysql-server \
     --addpkg imagemagick \
-    --addpkg subversion \
+    --addpkg git-core \
     --addpkg avahi-daemon \
     --addpkg ffmpeg \
     --addpkg ffmpeg2theora \

@@ -1,5 +1,13 @@
 #!/bin/sh
-#fails in bootstrap
+
+#checkout mediawiki
+git clone https://gerrit.wikimedia.org/r/p/mediawiki/core.git /srv/mediawiki
+
+#checkout extensions
+for ext in TimedMediaHandler TitleBlacklist UploadWizard MwEmbedSupport; do
+    git clone https://gerrit.wikimedia.org/r/p/mediawiki/extensions/$ext.git /srv/mediawiki/extensions/$ext
+done
+
 cat > /etc/apache2/sites-available/default << EOF
 <VirtualHost *:80>
   ServerName mediawiki.local
@@ -22,6 +30,7 @@ service apache2 restart
 
 mysqladmin create mediawiki
 
+chown -R mediawiki.mediawiki /srv/mediawiki
 chown -R www-data.www-data /srv/mediawiki/images
 
 cd /srv/mediawiki/maintenance
@@ -45,12 +54,10 @@ require( "\$IP/extensions/TitleBlacklist/TitleBlacklist.php" );
 require( "\$IP/extensions/MwEmbedSupport/MwEmbedSupport.php" );
 
 require( "\$IP/extensions/TimedMediaHandler/TimedMediaHandler.php" );
-\$wgMaxShellMemory = 1024*64*1024;
 \$wgFFmpegLocation = "/usr/bin/ffmpeg";
 \$wgFFmpeg2theoraLocation = "/usr/bin/ffmpeg2theora";
 \$wgShowExepctionDetails = true;
 \$wgWaitTimeForTranscodeReset = 10;
-\$wgTranscodeBackgroundTimeLimit = 3600 * 4 * 1000;
 
 require_once( "\$IP/extensions/UploadWizard/UploadWizard.php" );
 \$wgUploadWizardConfig['enableFirefogg'] = true;
@@ -59,6 +66,14 @@ require_once( "\$IP/extensions/UploadWizard/UploadWizard.php" );
 
 \$wgFileExtensions = array( 'png', 'gif', 'jpg', 'jpeg' , 'oga', 'ogv', 'ogg', 'webm');
 \$wgShowExceptionDetails = true;
+
+\$wgAPIRequestLog="/tmp/mw.log";
+\$wgDebugLogFile = "/tmp/debug.log";
+
+\$wgUseTidy = true;
+\$wgTidyInternal = false;
+\$wgAlwaysUseTidy = false;
+\$wgTidyBin = '/usr/bin/tidy';
 EOF
 
 
