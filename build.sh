@@ -15,13 +15,18 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
     --addpkg acpid \
     --addpkg vim \
     --addpkg wget \
+    --addpkg curl \
     --addpkg pwgen \
+    --addpkg memcached \
     --addpkg apache2-mpm-prefork \
     --addpkg libapache2-mod-php5 \
     --addpkg php5-cli \
     --addpkg php-pear \
     --addpkg php5-curl \
     --addpkg php5-mysql \
+    --addpkg php-apc \
+    --addpkg php5-gd \
+    --addpkg php5-intl \
     --addpkg mysql-server \
     --addpkg imagemagick \
     --addpkg git-core \

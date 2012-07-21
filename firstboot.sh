@@ -8,6 +8,7 @@ for ext in TimedMediaHandler TitleBlacklist UploadWizard MwEmbedSupport; do
     git clone https://gerrit.wikimedia.org/r/p/mediawiki/extensions/$ext.git /srv/mediawiki/extensions/$ext
 done
 
+
 cat > /etc/apache2/sites-available/default << EOF
 <VirtualHost *:80>
   ServerName mediawiki.local
@@ -23,7 +24,7 @@ cat > /etc/php5/apache2/conf.d/mediawiki.ini <<EOF
 upload_max_filesize = 128M
 post_max_size = 128M
 EOF
-echo "video/webm                webm" >> /etc/mime.types
+grep webm /etc/mime.types || echo "video/webm       webm" >> /etc/mime.types
 
 a2enmod rewrite
 service apache2 restart
@@ -44,6 +45,11 @@ php install.php \
     WikiVM admin
 
 cat >> /srv/mediawiki/LocalSettings.php << EOF
+\$wgMainCacheType = CACHE_MEMCACHED;
+\$wgParserCacheType = CACHE_MEMCACHED; # optional
+\$wgMessageCacheType = CACHE_MEMCACHED; # optional
+\$wgMemCachedServers = array( "127.0.0.1:11211" );
+\$wgSessionsInMemcached = true;
 
 \$wgEnableUploads  = true;
 \$wgUseImageMagick = true;
@@ -54,7 +60,7 @@ require( "\$IP/extensions/TitleBlacklist/TitleBlacklist.php" );
 require( "\$IP/extensions/MwEmbedSupport/MwEmbedSupport.php" );
 
 require( "\$IP/extensions/TimedMediaHandler/TimedMediaHandler.php" );
-\$wgFFmpegLocation = "/usr/bin/ffmpeg";
+\$wgFFmpegLocation = "/usr/bin/avconv";
 \$wgFFmpeg2theoraLocation = "/usr/bin/ffmpeg2theora";
 \$wgShowExepctionDetails = true;
 \$wgWaitTimeForTranscodeReset = 10;
@@ -62,7 +68,7 @@ require( "\$IP/extensions/TimedMediaHandler/TimedMediaHandler.php" );
 require_once( "\$IP/extensions/UploadWizard/UploadWizard.php" );
 \$wgUploadWizardConfig['enableFirefogg'] = true;
 \$wgUploadWizardConfig['enableFormData'] = true;
-\$wgUploadWizardConfig['enableChunked'] = false;
+\$wgUploadWizardConfig['enableChunked'] = true;
 
 \$wgFileExtensions = array( 'png', 'gif', 'jpg', 'jpeg' , 'oga', 'ogv', 'ogg', 'webm');
 \$wgShowExceptionDetails = true;
