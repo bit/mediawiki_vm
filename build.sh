@@ -4,8 +4,8 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
     --verbose --debug \
     --arch i386 \
     --flavour generic \
-    --dest $base/mediawiki \
-    --hostname mediawiki \
+    --dest $base/swift \
+    --hostname swift \
     --swapsize 512 \
     --rootsize 8192 \
     --user mediawiki \
@@ -33,5 +33,13 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
     --addpkg avahi-daemon \
     --addpkg ffmpeg \
     --addpkg ffmpeg2theora \
+    --addpkg xfsprogs \
+    --addpkg screen \
+    --addpkg swift \
+    --addpkg swift-proxy \
+    --addpkg swift-account \
+    --addpkg swift-container \
+    --addpkg swift-object \
+    --addpkg swauth \
     --execscript=$base/install.sh \
     --firstboot=$base/firstboot.sh
