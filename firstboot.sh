@@ -8,9 +8,8 @@
 cd /opt
 git clone https://github.com/openstack/swift
 cd swift
-git checkout 1.4.3
+#git checkout 1.4.3
 python setup.py develop
-
 
 swkey=mymadeupkey
 #5GB swift disk
@@ -380,6 +379,7 @@ EOF
 cat > /etc/php5/apache2/conf.d/mediawiki.ini << EOF 
 upload_max_filesize = 128M
 post_max_size = 128M
+max_execution_time = 360
 EOF
 grep webm /etc/mime.types || echo "video/webm       webm" >> /etc/mime.types
 
@@ -477,6 +477,64 @@ EOF
 cd /srv/mediawiki/maintenance
 php update.php --quick
 
+cat > /usr/local/bin/jobs-loop.sh <<EOF
+#!/bin/bash
+#
+# NAME
+# jobs-loop.sh -- Continuously process a MediaWiki jobqueue
+#
+# SYNOPSIS
+# jobs-loop.sh [-t timeout] [-v virtualmemory] [job_type]
+
+# default maxtime for jobs
+maxtime=300
+maxvirtualmemory=400000
+
+# Whether to process the default queue. Will be the case if no job type
+# was specified on the command line. Else we only want to process given types
+dodefault=true
+
+while getopts "t:v:" flag
+do
+	case \$flag in
+		t)
+			maxtime=\$OPTARG
+			;;
+		t)
+			maxvirtualmemory=\$OPTARG
+			;;
+	esac
+done
+shift \$((\$OPTIND - 1))
+
+# Limit virtual memory
+ulimit -v \$maxvirtualmemory
+
+# When killed, make sure we are also getting ride of the child jobs
+# we have spawned.
+trap 'kill %-; exit' SIGTERM
+
+
+if [ -z "\$1" ]; then
+	echo "Starting default queue job runner"
+	dodefault=true
+	#types="htmlCacheUpdate sendMail enotifNotify uploadFromUrl fixDoubleRedirect renameUser"
+	types="sendMail enotifNotify uploadFromUrl fixDoubleRedirect MoodBarHTMLMailerJob ArticleFeedbackv5MailerJob RenderJob"
+else
+	echo "Starting type-specific job runner: \$1"
+	dodefault=false
+	types=\$1
+fi
+
+cd /srv/mediawiki/maintenance
+while [ 1 ];do
+	nice -n 20 php runJobs.php --wiki=mediawiki --procs=5 --type="\$type" --maxtime=\$maxtime &
+	wait
+	sleep 5
+done
+EOF
+chmod 755 /usr/local/bin/job-loop.sh
+
 cat > /etc/init/timedmediahandler.conf <<EOF
 # TimedMediaHandler WebVideoJobRunner
 
@@ -490,8 +548,22 @@ respawn limit 10 5
 
 umask 022
 
-env IP=/srv/mediawiki
-exec /usr/bin/sudo -u www-data /usr/bin/php \$IP/extensions/TimedMediaHandler/maintenance/WebVideoJobRunner.php
+exec /usr/bin/sudo -u www-data /usr/local/bin/job-loop.sh -t 14400 -v 0 webVideoTranscode
 EOF
 service timedmediahandler start
 
+
+cat > /srv/mediawiki/update.sh <<EOF
+#!/bin/bash
+cd \`dirname \$0\`
+base=\`pwd\`
+git pull
+cd extensions
+for ext in \`ls | grep -v README\`; do
+	cd \$base/extensions/\$ext
+	git pull
+done
+cd \$base/maintenance
+php update.php --quick
+EOF
+chmod 755 /srv/mediawiki/update.sh
