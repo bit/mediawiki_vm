@@ -374,6 +374,14 @@ cat > /etc/apache2/sites-available/default << EOF
 
   ErrorLog /var/log/apache2/mediawiki_error.log
   CustomLog /var/log/apache2/mediawiki_access.log combined
+  <Directory "/srv/mediawiki/images">
+   # Ignore .htaccess files
+   AllowOverride None
+   # Serve HTML as plaintext, don't execute SHTML
+   AddType text/plain .html .htm .shtml .php
+   # Don't run arbitrary PHP code.
+   php_admin_flag engine off
+  </Directory>
 </VirtualHost>
 EOF
 cat > /etc/php5/apache2/conf.d/mediawiki.ini << EOF 
@@ -476,6 +484,20 @@ EOF
 
 cd /srv/mediawiki/maintenance
 php update.php --quick
+
+cat <<- EOF | php edit.php MediaWiki:Common.js
+addOnloadHook(function() {
+    \$('a[accesskey="u"]').attr('href', '/index.php/Special:UploadWizard');
+});
+EOF
+
+cat <<- EOF | php edit.php Main_Page
+
+Upload file at [[Special:UploadWizard]]
+
+List of uploaded files [[Special:ListFiles]]
+EOF
+
 
 cat > /usr/local/bin/jobs-loop.sh <<EOF
 #!/bin/bash
