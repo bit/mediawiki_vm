@@ -2,7 +2,7 @@
 base=$(pwd)
 sudo  vmbuilder vbox ubuntu --suite=precise \
     --verbose --debug \
-    --arch i386 \
+    --arch amd64 \
     --flavour generic \
     --dest $base/mediawiki \
     --hostname mediawiki \
@@ -31,7 +31,8 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
     --addpkg imagemagick \
     --addpkg git-core \
     --addpkg avahi-daemon \
-    --addpkg ffmpeg \
+    --addpkg libav-tools \
     --addpkg ffmpeg2theora \
+    --addpkg bash-completion \
     --execscript=$base/install.sh \
     --firstboot=$base/firstboot.sh
