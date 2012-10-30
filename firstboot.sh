@@ -555,7 +555,7 @@ while [ 1 ];do
 	sleep 5
 done
 EOF
-chmod 755 /usr/local/bin/job-loop.sh
+chmod 755 /usr/local/bin/jobs-loop.sh
 
 cat > /etc/init/timedmediahandler.conf <<EOF
 # TimedMediaHandler WebVideoJobRunner
@@ -570,7 +570,7 @@ respawn limit 10 5
 
 umask 022
 
-exec /usr/bin/sudo -u www-data /usr/local/bin/job-loop.sh -t 14400 -v 0 webVideoTranscode
+exec /usr/bin/sudo -u www-data /usr/local/bin/jobs-loop.sh -t 14400 -v 0 webVideoTranscode
 EOF
 service timedmediahandler start
 
@@ -589,3 +589,15 @@ cd \$base/maintenance
 php update.php --quick
 EOF
 chmod 755 /srv/mediawiki/update.sh
+
+cat > /etc/apt/sources.list.d/mediawiki.list <<EOF
+## Wikimedia APT repository
+deb http://apt.wikimedia.org/wikimedia precise-wikimedia main universe
+deb-src http://apt.wikimedia.org/wikimedia precise-wikimedia main universe
+EOF
+curl http://apt.wikimedia.org/autoinstall/keyring/wikimedia-archive-keyring.gpg > /etc/apt/trusted.gpg.d/wikimedia-archive-keyring.gpg
+
+apt-get update
+apt-get -y install oggvideotools pip-python
+
+pip install git-review
