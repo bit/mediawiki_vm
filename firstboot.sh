@@ -97,6 +97,14 @@ require_once( "\$IP/extensions/UploadWizard/UploadWizard.php" );
 \$wgTidyInternal = false;
 \$wgAlwaysUseTidy = false;
 \$wgTidyBin = '/usr/bin/tidy';
+
+/*
+\$wgForeignFileRepos[] = array(
+	'class'                   => 'ForeignAPIRepo',
+	'name'                    => 'wikimediacommons',
+	'apibase'                 => 'http://commons.wikimedia.org/w/api.php',
+);
+*/
 EOF
 
 
@@ -200,6 +208,7 @@ git pull
 cd extensions
 for ext in \`ls | grep -v README\`; do
 	cd \$base/extensions/\$ext
+	echo \$ext
 	git pull
 done
 cd \$base/maintenance
