@@ -31,8 +31,19 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
     --addpkg imagemagick \
     --addpkg git-core \
     --addpkg avahi-daemon \
-    --addpkg libav-tools \
-    --addpkg ffmpeg2theora \
     --addpkg bash-completion \
+	--addpkg imagemagick \
+	--addpkg ghostscript \
+	--addpkg libav-tools \
+	--addpkg ffmpeg2theora \
+	--addpkg librsvg2-bin \
+	--addpkg djvulibre-bin \
+	--addpkg netpbm \
+	--addpkg libogg0 \
+	--addpkg libvorbisenc2 \
+	--addpkg libtheora0 \
+	--addpkg oggvideotools \
+	--addpkg libvips15 \
+	--addpkg libvips-tools \
     --execscript=$base/install.sh \
     --firstboot=$base/firstboot.sh

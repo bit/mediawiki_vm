@@ -143,41 +143,45 @@ dodefault=true
 
 while getopts "t:v:" flag
 do
-	case \$flag in
-		t)
-			maxtime=\$OPTARG
-			;;
-		t)
-			maxvirtualmemory=\$OPTARG
-			;;
-	esac
+    case \$flag in
+        t)
+            maxtime=\$OPTARG
+            ;;
+        v)
+            maxvirtualmemory=\$OPTARG
+            ;;
+    esac
 done
 shift \$((\$OPTIND - 1))
-
 # Limit virtual memory
-ulimit -v \$maxvirtualmemory
+#echo ulimit -v \$maxvirtualmemory
+#ulimit -v \$maxvirtualmemory
 
 # When killed, make sure we are also getting ride of the child jobs
 # we have spawned.
-trap 'kill %-; exit' SIGTERM
+#trap 'kill %-; exit' SIGTERM
 
 
 if [ -z "\$1" ]; then
-	echo "Starting default queue job runner"
-	dodefault=true
-	#types="htmlCacheUpdate sendMail enotifNotify uploadFromUrl fixDoubleRedirect renameUser"
-	types="sendMail enotifNotify uploadFromUrl fixDoubleRedirect MoodBarHTMLMailerJob ArticleFeedbackv5MailerJob RenderJob"
+    echo "Starting default queue job runner"
+    dodefault=true
+    #types="htmlCacheUpdate sendMail enotifNotify uploadFromUrl fixDoubleRedirect renameUser"
+    types="sendMail enotifNotify uploadFromUrl fixDoubleRedirect MoodBarHTMLMailerJob ArticleFeedbackv5MailerJob RenderJob"
 else
-	echo "Starting type-specific job runner: \$1"
-	dodefault=false
-	types=\$1
+    echo "Starting type-specific job runner: \$1"
+    dodefault=false
+    types=\$1
 fi
 
 cd /srv/mediawiki/maintenance
 while [ 1 ];do
-	nice -n 20 php runJobs.php --wiki=mediawiki --procs=5 --type="\$type" --maxtime=\$maxtime &
-	wait
-	sleep 5
+    echo start to loop
+for type in \$types; do
+    echo nice -n 20 php runJobs.php --wiki=mediawiki --procs=5 --type="\$type" --maxtime=\$maxtime
+    nice -n 20 php runJobs.php --wiki=mediawiki --procs=5 --type="\$type" --maxtime=\$maxtime >> /tmp/jobs.log 2>&1 &
+    wait
+done
+    sleep 5
 done
 EOF
 chmod 755 /usr/local/bin/jobs-loop.sh
