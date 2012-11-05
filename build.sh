@@ -2,7 +2,7 @@
 base=$(pwd)
 sudo  vmbuilder vbox ubuntu --suite=precise \
     --verbose --debug \
-    --arch i386 \
+    --arch amd64 \
     --flavour generic \
     --dest $base/swift \
     --hostname swift \
@@ -31,8 +31,6 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
     --addpkg imagemagick \
     --addpkg git-core \
     --addpkg avahi-daemon \
-    --addpkg ffmpeg \
-    --addpkg ffmpeg2theora \
     --addpkg xfsprogs \
     --addpkg screen \
     --addpkg swift \
@@ -41,5 +39,19 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
     --addpkg swift-container \
     --addpkg swift-object \
     --addpkg swauth \
+    --addpkg bash-completion \
+	--addpkg imagemagick \
+	--addpkg ghostscript \
+	--addpkg libav-tools \
+	--addpkg ffmpeg2theora \
+	--addpkg librsvg2-bin \
+	--addpkg djvulibre-bin \
+	--addpkg netpbm \
+	--addpkg libogg0 \
+	--addpkg libvorbisenc2 \
+	--addpkg libtheora0 \
+	--addpkg oggvideotools \
+	--addpkg libvips15 \
+	--addpkg libvips-tools \
     --execscript=$base/install.sh \
     --firstboot=$base/firstboot.sh
