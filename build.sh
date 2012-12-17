@@ -35,6 +35,7 @@ sudo  vmbuilder vbox ubuntu --suite=precise \
 	--addpkg imagemagick \
 	--addpkg ghostscript \
 	--addpkg libav-tools \
+	--addpkg libavcodec-extra-53 \
 	--addpkg ffmpeg2theora \
 	--addpkg librsvg2-bin \
 	--addpkg djvulibre-bin \
