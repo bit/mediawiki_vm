@@ -353,7 +353,7 @@ swauth-add-user -A http://127.0.0.1:8080/auth -K $swkey -a test tester testing
 AUTH_URL=`curl  -H "X-Storage-User: $AUTH_USER" -H "X-Storage-Pass: $AUTH_KEY" $AUTH/v1.0 | sed "s/.*http/http/" | sed "s/\".*//"`
 PUBLIC_URL=`echo $AUTH_URL | sed "s/127.0.0.1/swift.local/"`
 
-for container in public thumb temp; do
+for container in public thumb media temp; do
     swift -A $AUTH/v1.0 -U $AUTH_USER -K $AUTH_KEY post -r '.r:*' mediawiki-$container
 done
 
@@ -476,6 +476,7 @@ require( "\$IP/extensions/SwiftCloudFiles/SwiftCloudFiles.php" );
         'zones'             =>  array(
             'public'  =>  array( 'container' =>  'public', 'url' =>  \$wgSwiftConf['url'] . '/mediawiki-public' ),
             'thumb'   =>  array( 'container' =>  'thumb',  'url' =>  \$wgSwiftConf['url'] . '/mediawiki-thumb' ),
+            'media'   =>  array( 'container' =>  'media',  'url' =>  \$wgSwiftConf['url'] . '/mediawiki-media' ),
             'temp'    =>  array( 'container' =>  'temp', 'url' =>  \$wgSwiftConf['url'] . '/mediawiki-temp' ),
             'deleted' =>  array( 'container' =>  'deleted' ),
         )
